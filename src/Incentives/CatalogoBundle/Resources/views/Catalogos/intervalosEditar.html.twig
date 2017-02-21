@@ -1,0 +1,44 @@
+{% extends '::basePopLte.html.twig' %}
+
+{% block title %}Agregar Intervalo{% endblock %}
+
+{% block content %}
+<div class="">
+          <div class="modal-dialog box box-warning">
+            <div class="modal-content">
+              <div class="modal-header bg-black">
+                <h4 class="modal-title">Editar Intervalo</h4>
+              </div>
+              <div class="modal-body">
+                <form action="{{ path('catalogo_intervaloseditar') }}/{{ id }}" method="POST"  class="form-horizontal">
+                    {{ form_errors(form) }}
+                    <input type='hidden' name='id' value={{ id }}>
+                    <fieldset>
+                        <div class="form-group">
+                            {{ form_label(form.minimo, label|default(null), { 'label_attr': { 'class': 'col-sm-4 control-label' } }) }}
+                            <div class="col-sm-8">
+                                {{ form_widget(form.minimo, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.maximo, label|default(null), { 'label_attr': { 'class': 'col-sm-4 control-label' } }) }}
+                            <div class="col-sm-8">
+                                {{ form_widget(form.maximo, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.puntos, label|default(null), { 'label_attr': { 'class': 'col-sm-4 control-label' } }) }}
+                            <div class="col-sm-8">
+                                {{ form_widget(form.puntos, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                         </div>
+                         <div class="modal-footer bg-black">
+                            {{ form_widget(form.Enviar, { 'attr': {'class': 'btn btn-warning bg-black'} }) }}
+                        </div>
+                {{ form_widget(form._token) }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+<select class="form-control" name="proveedores[ciudad]" id="proveedores_ciudad" required>
+	<option value="">Seleccione una opcion</option>
+	{% for ciudad in listado %}
+		<option value="{{ ciudad.id }}">{{ ciudad.nombre }}</option>
+	{% endfor %}
+</select>

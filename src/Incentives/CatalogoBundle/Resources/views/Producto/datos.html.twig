@@ -1,0 +1,294 @@
+{% extends '::baseLte.html.twig' %}
+
+{% block title %}{{ parent() }}::Datos Producto{% endblock %}
+{% block sectiontitle %}<h1>Catálogo<small>Datos Producto</small></h1>{% endblock %}
+{% block breadcum %} <li><a href="{{ path('producto') }}"><i class="fa fa-star"></i>Productos Catalogo</a>
+	<br><a href="{{ path('producto_listadouniversal') }}"><i class="fa fa-star-o"></i>Productos General</a>
+	</li>
+	<li class="active">Datos Producto</li>{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-6">
+	    <div class="box box-warning">
+		    <div class="box-header bg-black">
+				<h3 class="box-title">Datos Producto {{ producto.codInc }}</h3>
+				<div class="box-tools pull-right">
+					<a href="{{ path('producto_editar',  {"id": producto.id}) }}">
+						<button class="btn btn-primary">
+							<i class="fa fa-edit"></i>
+						</button>
+					</a>
+				</div>
+			</div>
+			<div class="box-body">
+				<table class="table table-bordered table-striped table-condensed dataTable">
+					<tbody>
+						<tr><td>Nombre</td><td>{{ producto.nombre }}</td></tr>
+						<tr><td>Tipo</td><td>{{ producto.tipo.nombre}}</td></tr>
+						<tr><td>Categoria</td><td>{{ producto.categoria.nombre}}</td></tr>
+						<tr><td>Clasificación</td><td>{{ producto.productoclasificacion.nombre}}</td></tr>
+						<tr><td>Referencia</td><td>{{ producto.referencia }}</td></tr>
+						<tr><td>Marca</td><td>{{ producto.marca }}</td></tr>
+						<tr><td>Descripcion</td><td>{{ producto.descripcion }}</td></tr>
+						<tr><td>Codigo EAN</td><td>{{ producto.codEAN }}</td></tr>
+						<tr><td>SKU</td><td>{{ producto.codInc }}</td></tr>
+						<tr><td>Dimensiones</td><td>{{ producto.Alto }} x {{ producto.Largo }} x {{ producto.Ancho }} cm.</td></tr>
+						<tr><td>Peso</td><td>{{ producto.peso }} Kg.</td></tr>
+						<tr><td>Precio</td><td>{{ producto.precio }}</td></tr>
+						<tr><td>IVA</td><td>{{ producto.iva }} %</td></tr>
+						<tr><td>Logistica</td><td>{{ producto.logistica }} </td></tr>
+						<tr><td>Incremento</td><td>{{ producto.incremento }} %</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	    <div class="box box-warning">
+		    <div class="box-header bg-black">
+				<h3 class="box-title">Atributos</h3>
+				<div class="box-tools pull-right">
+					<a id="agregar_atributo" href="{{ path('producto_agregaratributo',  {"id": producto.id}) }}">
+						<button class="btn btn-small btn-success">
+							<i class="fa fa-plus"></i>
+						</button>
+					</a>
+				</div>
+			</div>
+			<div class="box-body">
+				<table class="table table-bordered table-striped table-condensed dataTable">
+					<thead>
+						<tr>
+							<th>Atributo</th>
+							<th>Valor</th>
+							<th>Imagen</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for atributo in atributos %}		
+								<tr>
+									<td>{{ atributo.tipo.nombre }}</td>
+									<td>{{ atributo.valor }}</td>
+									<td><a href="../../../{{ atributo.imagen | slice (7)}}" target='_blank'><img src="../../../{{( atributo.imagen | slice (7))[:-4]}}_min.jpg"><a></td>
+								</tr>			
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+	    <div class="box box-warning">
+		    <div class="box-header bg-black">
+				<h3 class="box-title">Imagenes</h3>
+				<div class="box-tools pull-right">
+					<a id="agregar_imagen" href="{{ path('producto_agregarimagen',  {"id": producto.id}) }}">
+						<button class="btn btn-small btn-success">
+							<i class="fa fa-plus"></i>
+						</button>
+					</a>
+				</div>
+			</div>
+			<div class="box-body">
+				<table class="table table-bordered table-striped table-condensed dataTable">
+					<thead>
+						<tr>
+							<th>Imagen</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for imagenes in imagen %}		
+								<tr>
+									<td><a href="../../../{{imagenes.path| slice (7)}}" target='_blank'><img src="../../../{{(imagenes.path| slice (7))[:-4]}}_min.jpg"><a></td>
+									<td>{% if (imagenes.estado=='0') %}
+											<a class="btn btn-danger 1" onClick=confirmar('{{ url("producto_estadoimagen", {"id": imagenes.id}) }}') href="#">
+											Inactiva</a>
+										{% else %}
+											<a class="btn btn-success 1" onClick=confirmar('{{ url("producto_estadoimagen", {"id": imagenes.id}) }}') href="#">
+											Activa</a>
+										{% endif %}
+									</td>
+								</tr>			
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+	    <div class="box box-warning">
+		    <div class="box-header bg-black">
+				<h3 class="box-title">Precios</h3>
+				<div class="box-tools pull-right">
+					<a id="agregar_precio" href="{{ path('producto_agregarprecio',  {"id": producto.id}) }}">
+						<button class="btn btn-small btn-success">
+							<i class="fa fa-plus icon-white"></i>
+						</button>
+					</a>
+				</div>
+			</div>
+			<div class="box-body">
+				<table class="table table-bordered table-striped table-condensed dataTable">
+					<thead>
+						<tr>
+							<th>Proveedor</th>
+							<th>Precio</th>
+							<th>Precio Dolares</th>
+							<th>Principal</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for precio in productoprecio %}
+						<tr>
+							<td><a class="precio_editar" href="{{ path("producto_editarprecio", {"id": precio.id}) }}">{{precio.proveedor.nombre}}</a></td>
+							<td class="text-right">{{ precio.precio }}</td>
+							<td class="text-right">{{ precio.precioDolares }}</td>
+							<td class="text-right">{{ precio.principal }}</td>
+							<td>{% if (precio.estado.id==0) %}
+										<a class="btn btn-danger 1" onClick=confirmar('{{ url("producto_estadoprecio", {"id": precio.id}) }}') href="#">
+										Inactivo</a>
+									{% else %}
+										<a class="btn btn-success 1" onClick=confirmar('{{ url("producto_estadoprecio", {"id": precio.id}) }}') href="#">
+										Activo</a>
+									{% endif %}
+								</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+	    <div class="box box-warning">
+		    <div class="box-header bg-black">
+				<h3 class="box-title">Catálogos de Premios</h3>
+				<div class="box-tools pull-right">
+					<a id="agregar_premio" href="{{ path('premios_nuevo_producto',  {"producto": producto.id}) }}">
+						<button class="btn btn-small btn-success">
+							<i class="fa fa-plus"></i>
+						</button>
+					</a>
+				</div>
+			</div>
+			<div class="box-body">
+				<table class="table table-bordered table-striped table-condensed dataTable">
+					<thead>
+						<tr>
+							<th>Catalogo</th>
+							<th>Programa</th>
+							<th>Cliente</th>
+							<th>Puntos</th>
+							<th>Precio</th>
+							<th>Incremento (%)</th>
+							<th>Logistica</th>
+							<th>Puntos Temporal</th>
+							<th>Precio Temporal</th>
+							<th>Incremento Temporal (%)</th>
+							<th>Logistica Temporal</th>
+							<th>Agotado</th>
+							<th>Puntos Promoción</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for premio in premios %}
+						<tr>
+							<td><a class="premio_editar" href="{{ path("premios_editar_producto", {"premio": premio.premio.id, "producto": producto.id}) }}">{{ premio.premio.catalogos.nombre }}</a></td>
+							<td>{{ premio.premio.catalogos.programa.nombre }}</td>
+							<td>{{ premio.premio.catalogos.programa.cliente.nombre }}</td>
+							<td>{{ premio.premio.puntos }}</td>
+							<td>{{ premio.premio.precio }}</td>
+							<td>{{ premio.premio.incremento }}</td>
+							<td>{{ premio.premio.logistica }}</td>
+							<td>{{ premio.premio.puntosTemporal }}</td>
+							<td>{{ premio.premio.precioTemporal }}</td>
+							<td>{{ premio.premio.incrementoTemporal }}</td>
+							<td>{{ premio.premio.logisticaTemporal }}</td>
+							<td>{{ premio.premio.agotado }}</td>
+							<td>{% if is_granted('ROLE_ADMIN') or  is_granted('ROLE_DIR') or is_granted('ROLE_ASISCOMP') or is_granted('ROLE_CAT') %}
+									{% if (premio.premio.promocion) %}
+										{{ premio.premio.promocion[0].puntos }}
+										<a href="{{ path('promociones_datos', {"promocion": premio.premio.promocion[0].id }) }}" target="_blank">
+											<button class="btn btn-sm btn-info">
+												<i class="fa fa-plus"></i> Ver
+											</button>
+										</a>
+									{% else %}
+										<a class="promociones_nuevo" href="{{ path('promociones_nuevo', {"premio": premio.premio.id}) }}">
+											<button class="btn btn-sm btn-success">
+												<i class="fa fa-plus"></i> Agregar
+											</button>
+										</a>
+									{% endif %}
+								{% endif %}
+							</td>
+
+							<td>{% if (premio.premio.estado) %}
+								{% if (premio.premio.estado.id==1) %}
+										<a class="btn btn-success 1" {% if is_granted('ROLE_ADMIN') or  is_granted('ROLE_DIR') %} onClick=confirmar('{{ url("premios_estado_producto", {"premio": premio.premio.id, "producto": producto.id}) }}') {% endif %} href="#">
+										Activo</a>
+									{% else %}
+										<a class="btn btn-danger 1" onClick=confirmar('{{ url("premios_estado_producto", {"premio": premio.premio.id, "producto": producto.id}) }}') href="#">
+										Inactivo</a>										
+									{% endif %}
+								{% endif %}
+							</td>
+												
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>	
+
+{% endblock %}
+
+{% block javascript %}
+	
+	{{ parent() }}
+	
+	<script>
+
+	function confirmar(ruta)
+	{
+	  if (confirm("Cambiar estado")==true){
+	  	self.location=ruta;
+	  }else{
+	  	alert("OK");
+	  }
+	  
+	}
+
+	$("#agregar_imagen").colorbox({href:"{{ path('producto_agregarimagen',  {"id": producto.id}) }}"});
+	$("#agregar_atributo").colorbox({href:"{{ path('producto_agregaratributo',  {"id": producto.id}) }}"});
+	$("#agregar_precio").colorbox({href:"{{ path('producto_agregarprecio',  {"id": producto.id}) }}"});
+	$("#agregar_premio").colorbox({href:"{{ path('premios_nuevo_producto',  {"producto": producto.id}) }}"});
+	$(".precio_editar").colorbox({href: this.href });
+	$(".premio_editar").colorbox({href: this.href});
+	$(".promociones_nuevo").colorbox({href: this.href});
+
+	</script>
+{% endblock %}
+
+{% block stylesheet %}
+  {{ parent() }}
+  <style>
+    body {
+        width: 110%;
+    }
+  </style>
+
+{% endblock %}

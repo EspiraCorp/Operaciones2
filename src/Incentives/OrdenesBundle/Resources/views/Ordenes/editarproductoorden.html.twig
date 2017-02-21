@@ -1,0 +1,31 @@
+<table>
+    <tr>
+        <th>Redencion</th>
+        <th>Programa</th>
+        <th>Participante</th>
+        <th>Documento</th>
+        <th>Fecha</th>
+        <th>Valor Venta</th>
+        <th>Rentabilidad</th>
+        <th></th>
+    </tr>
+{% for redencion in redenciones %}
+    <tr>
+        <td>{{ redencion.redencion.codigoredencion }}</td>
+        <td>{{ redencion.redencion.participante.programa.nombre }}</td>
+        <td>{{ redencion.redencion.participante.nombre }}</td>
+        <td>{{ redencion.redencion.participante.documento }}</td>
+        <td>{{ redencion.redencion.fecha | date("Y-m-d") }}</td>
+        {% set rentabilidad = 0 %}
+        {% set valorventa = 0 %}
+        {% if (redencion.redencion.premio.precio!=0 and redencion.redencion.premio.incremento!=0) %}
+            {% set valorventa = redencion.redencion.premio.precio/(1-(redencion.redencion.premio.incremento/100)) %}
+            {% set rentabilidad = (1-(redencion.ordenesProducto.valorunidad/valorventa))*100 %}
+        {% endif %}
+        <td>${{ valorventa |number_format(2, ',', '.') }}</td>
+        <td>{{ rentabilidad |number_format(2, ',', '.') }}%</td>
+        <td><a class="btn" id="redencion_{{ redencion.id }}" href="{{ path("ordenredencion_eliminarred", {"id": redencion.id}) }}">Eliminar</a></td>
+    </tr>
+
+{% endfor %}
+</table>
